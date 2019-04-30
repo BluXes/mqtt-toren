@@ -1,0 +1,53 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    background: #262626;
+}
+.cup
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 150px;
+    height: 180px;
+    border: 6px solid #262626;
+    border-radius: 15px;
+    background: url(water.png);
+    background-repeat: repeat-x;
+    animation: animate 5s linear infinite;
+    box-shadow: 0 0 0 6px #fff, 0 20px 35px rgba(0, 0, 0,.5);
+}
+
+
+
+
+
+@keyframes animate
+{
+    0%
+    {
+        background-position: 0 200px;
+    }
+    20%
+    {
+        background-position: 500px 160px;
+    }
+    40%
+    {
+        background-position: 1000px 120px;
+    }
+    60%
+    {
+        background-position: 1500px 80px;
+    }
+    80%
+    {
+        background-position: 2000px 40px;
+    }
+    100%
+    {
+        background-position: 2500px 0px;
+    }
+}
