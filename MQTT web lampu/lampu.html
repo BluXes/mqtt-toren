@@ -16,11 +16,12 @@
         <img id="image" src="lampoff.png" width="150px">
     </div>
     <div class="button">
-        <button onclick="gantigambar();">On/Off</button>
+        <button id="button">On/Off</button>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     <script>
+        var client;
         var statusgambar = "off";
         // function gantigambar()
         // {
@@ -42,7 +43,7 @@
         // }
 
         // MQTT start
-        client = new Paho.MQTT.Client("broker.somearch.co.id", Number(15675), "farhan");
+        client = new Paho.MQTT.Client("broker.somearch.co.id", Number(15675), "salman01122");
 		client.onConnectionLost = onConnectionLost;
 		client.onMessageArrived = onMessageArrived;
 		client.connect({
@@ -52,6 +53,20 @@
 			cleanSession: false,
 			hosts: ['ws://broker.somearch.co.id:15675/ws']
 		});
+        var mode = 2;
+        $(function(){
+            $('#button').click(function(event) {
+                if (mode == 2) {
+                    client.send('LED','{"data":"1"}',1,false);
+                    mode = 1;
+                }
+                else
+                {
+                    client.send('LED','{"data":"2"}',1,false);
+                    mode = 2;
+                }
+            });
+        });
 		function onConnect() {
 		  console.log("Connected to MQTT Server...");
 		  client.subscribe("LED");
