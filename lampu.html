@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lampu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="text">
+        <p style="color:cornsilk;">Status: <span class="status">Not Connected</span>
+    </div>
+    <div class="lampu">
+        <img id="image" src="lampoff.png" width="150px">
+    </div>
+    <div class="button">
+        <button onclick="gantigambar();">On/Off</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    <script>
+        var statusgambar = "off";
+        // function gantigambar()
+        // {
+            
+        //     if (statusgambar = "off")
+        //     {
+        //         // var img = document.getElementById("image")
+        //         // img.src="lampon.png";
+        //         statusgambar = "on";
+        //         // console.log(statusgambar);
+        //     }
+        //     else if (statusgambar = "on")
+        //     {
+        //         // var img = document.getElementById("image")
+        //         // img.src="lampoff.png";
+        //         statusgambar = "off";
+        //         // console.log(statusgambar);
+        //     }
+        // }
+
+        // MQTT start
+        client = new Paho.MQTT.Client("broker.somearch.co.id", Number(15675), "farhan");
+		client.onConnectionLost = onConnectionLost;
+		client.onMessageArrived = onMessageArrived;
+		client.connect({
+			onSuccess: onConnect,
+			userName: 'belajar',
+			password: '2019',
+			cleanSession: false,
+			hosts: ['ws://broker.somearch.co.id:15675/ws']
+		});
+		function onConnect() {
+		  console.log("Connected to MQTT Server...");
+		  client.subscribe("LED");
+		  $(".status").html("Connected");
+		}
+		// called when the client loses its connection
+		function onConnectionLost(responseObject) {
+		  if (responseObject.errorCode !== 0) {
+			console.log("onConnectionLost:"+responseObject.errorMessage);
+		  }
+		}
+		// called when a message arrives
+		function onMessageArrived(message) {
+			console.log(message);
+			if (message.destinationName == "LED") {
+				var pesan = message.payloadString;
+				pesan = JSON.parse(pesan);
+				console.log(pesan);
+                if (pesan.data == 1)
+                {
+                    var img = document.getElementById("image")
+                    img.src="lampon.png";
+                }
+                else if (pesan.data == 2)
+                {
+                    var img = document.getElementById("image")
+                    img.src="lampoff.png";
+                }
+			}
+		}
+        // MQTT end
+    </script>
+</body>
+</html>
